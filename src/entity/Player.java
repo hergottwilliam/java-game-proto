@@ -19,6 +19,7 @@ public class Player extends Entity {
         this.keyHandler = keyHandler;
         setDefaultValues();
         getPlayerImage();
+        super.buildDirectionMaps();
     }
 
     public void setDefaultValues() {
@@ -31,51 +32,61 @@ public class Player extends Entity {
     public void getPlayerImage() {
         try {
             up1 = ImageIO.read(getClass().getResourceAsStream("/resources/lennon/lennon_up1.png"));
+            up2 = ImageIO.read(getClass().getResourceAsStream("/resources/lennon/lennon_up2.png"));
             down1 = ImageIO.read(getClass().getResourceAsStream("/resources/lennon/lennon_down1.png"));
+            down2 = ImageIO.read(getClass().getResourceAsStream("/resources/lennon/lennon_down2.png"));
+            left1 = ImageIO.read(getClass().getResourceAsStream("/resources/lennon/lennon_left1.png"));
+            left2 = ImageIO.read(getClass().getResourceAsStream("/resources/lennon/lennon_left2.png"));
+            right1 = ImageIO.read(getClass().getResourceAsStream("/resources/lennon/lennon_right1.png"));
+            right2 = ImageIO.read(getClass().getResourceAsStream("/resources/lennon/lennon_right2.png"));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     public void update() {
         if(keyHandler.upPressed == true) {
             direction = EntityDirectionEnum.UP;
             y -= speed;
+            animateWalk();
         }
         if(keyHandler.downPressed == true) {
             direction = EntityDirectionEnum.DOWN;
             y += speed;
+            animateWalk();
         }
         if(keyHandler.leftPressed == true) {
             direction = EntityDirectionEnum.LEFT;
             x -= speed;
+            animateWalk();
         }
         if(keyHandler.rightPressed == true) {
             direction = EntityDirectionEnum.RIGHT;
             x += speed;
+            animateWalk();
         }
     }
 
     public void draw(Graphics2D g2) {
-
         BufferedImage image = null;
-        
-        if(direction.equals(EntityDirectionEnum.UP)) {
-            image = up1;
-        } 
-        
-        if(direction.equals(EntityDirectionEnum.DOWN)) {
-            image = down1;
-        } 
-        
-        if(direction.equals(EntityDirectionEnum.LEFT)) {
-            image = up1;
-        } 
-        
-        if(direction.equals(EntityDirectionEnum.RIGHT)) {
-            image = down1;
-        } 
+
+        if(spriteNum == 1){
+            image = directionMap1.get(direction);
+        }
+        if(spriteNum == 2) {
+            image = directionMap2.get(direction);
+        }
 
         g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
+    }
+
+    public void animateWalk() {
+        spriteCounter++;
+        if(spriteCounter > 15) {
+            spriteNum = 3 - spriteNum; // switch between 2 & 1 (for steps)
+            spriteCounter = 0;
+        }
     }
 }
