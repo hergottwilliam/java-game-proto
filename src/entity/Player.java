@@ -14,17 +14,24 @@ public class Player extends Entity {
     GamePanel gp;
     KeyHandler keyHandler;
 
+    public final int screenX;
+    public final int screenY;
+
     public Player(GamePanel gp, KeyHandler keyHandler) {
         this.gp = gp;
         this.keyHandler = keyHandler;
+
+        screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
+        screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
+
         setDefaultValues();
         getPlayerImage();
         super.buildDirectionMaps();
     }
 
     public void setDefaultValues() {
-        x = 100;
-        y = 100;
+        worldX = 100;
+        worldY = 100;
         speed = 4;
         direction = EntityDirectionEnum.DOWN;
     }
@@ -49,22 +56,22 @@ public class Player extends Entity {
     public void update() {
         if(keyHandler.upPressed == true) {
             direction = EntityDirectionEnum.UP;
-            y -= speed;
+            worldY -= speed;
             animateWalk();
         }
         if(keyHandler.downPressed == true) {
             direction = EntityDirectionEnum.DOWN;
-            y += speed;
+            worldY += speed;
             animateWalk();
         }
         if(keyHandler.leftPressed == true) {
             direction = EntityDirectionEnum.LEFT;
-            x -= speed;
+            worldX -= speed;
             animateWalk();
         }
         if(keyHandler.rightPressed == true) {
             direction = EntityDirectionEnum.RIGHT;
-            x += speed;
+            worldX += speed;
             animateWalk();
         }
     }
@@ -79,7 +86,7 @@ public class Player extends Entity {
             image = directionMap2.get(direction);
         }
 
-        g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
     }
 
     public void animateWalk() {
