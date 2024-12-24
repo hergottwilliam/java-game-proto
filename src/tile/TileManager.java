@@ -18,7 +18,7 @@ public class TileManager {
     public TileManager(GamePanel gp) {
         this.gp = gp;
         tiles = new Tile[10];
-        mapTileNum = new int[gp.maxScreenCol][gp.maxScreenRow];
+        mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
         getTileImage();
         loadMap("/resources/maps/map.txt");
     }
@@ -42,10 +42,16 @@ public class TileManager {
 
     public void draw(Graphics2D g2) {
 
-        for(int i = 0; i < gp.maxScreenCol; i++) {
-            for(int j = 0; j < gp.maxScreenRow; j++) {
+        for(int i = 0; i < gp.maxWorldCol; i++) {
+            for(int j = 0; j < gp.maxWorldRow; j++) {
                 int tileNum = mapTileNum[i][j];
-                g2.drawImage(tiles[tileNum].image, i * gp.tileSize, j * gp.tileSize, gp.tileSize, gp.tileSize, null);
+
+                int worldX = i * gp.tileSize;
+                int worldY = j * gp.tileSize;
+                int screenX = worldX - gp.player.worldX + gp.player.screenX;
+                int screenY = worldY - gp.player.worldY + gp.player.screenY;
+
+                g2.drawImage(tiles[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
             }
         }
     }
@@ -55,9 +61,9 @@ public class TileManager {
             InputStream is = getClass().getResourceAsStream(filePath);
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
-            for(int i = 0; i < gp.maxScreenRow; i++) {
+            for(int i = 0; i < gp.maxWorldRow; i++) {
                 String line = br.readLine();
-                for(int j = 0; j < gp.maxScreenCol; j++) {
+                for(int j = 0; j < gp.maxWorldCol; j++) {
 
                     String numbers[] = line.split(" ");
                     mapTileNum[j][i] = Integer.parseInt(numbers[j]);

@@ -13,7 +13,6 @@ import tile.TileManager;
 public class GamePanel extends JPanel implements Runnable {
 
     // SCREEN SETTING
-
     final int originalTileSize = 16; // pixels
     final int scale = 3;
 
@@ -23,10 +22,16 @@ public class GamePanel extends JPanel implements Runnable {
     public final int screenWidth = tileSize * maxScreenCol;
     public final int screenHeight = tileSize * maxScreenRow;
 
+    // WORLD SETTINGS
+    public final int maxWorldCol = 60;
+    public final int maxWorldRow = 40;
+    public final int worldWidth = tileSize * maxWorldCol;
+    public final int worldHeight = tileSize * maxWorldRow;
+
     // GAME VARIABLES
     Thread gameThread;
     KeyHandler keyHandler = new KeyHandler();
-    Player player = new Player(this, this.keyHandler);
+    public Player player = new Player(this, this.keyHandler);
     TileManager tileManager = new TileManager(this);
 
     // GAME SETTINGS
